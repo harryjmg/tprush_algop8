@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=utf8>
+    <title>Mercredi 17 février -- TP numéro 2</title>
+  </head>
+<body>
+
+<p>Comme annoncé en cours, voici un petit programme qui trie quelques
+chaines de caractères en utilisant la fonction de bibliothèque qsort.
+Il lui manque la fonction de comparaison de deux éléments (ici la
+fonction comparer).
+<a href="tp2-prog1.c">
+<pre>
+/* tp2-prog1.c
+
+   Trier quelques chaines de caractères avec la fonction de bibliothèque qsort,
+*/
+# include <stdio.h>
+# include <string.h>
+# include <stdlib.h>
+# include <assert.h>
+
+enum {
+  N = 5,
+};
+
+int
+main(){
+  char * tab[N] = {
+    "premier",
+    "deuxième",
+    "troisième",
+    "quatrième",
+    "cinquième"
+  };
+  int nel = N;
+  int i;
+
+  qsort(tab, nel, sizeof tab[0], comparer);
+
+  for(i = 0; i < nel; i++)
+    printf("%s\n", tab[i]);
+
+  return 0;
+}
+</pre>
+</a>
+
+<p>
+<b>Question 1</b> : ajouter la fonctin de comparaison de manière à
+ce que le programme se compile correctement, sans warning même avec
+l'option de compilation -Wall et imprime correctement les chaines
+de caractères dans l'ordre alphabétique comme dans
+<pre>
+cinquième
+deuxième
+premier
+quatrième
+troisième
+</pre>
+
+<p>
+<b>Question 2</b> : écrire un autre programme qui trie des chaines
+de caractères lues (sur son entréee standard). S'assurer (1) qu'il
+trie correctement et (2) qu'il peut traiter au moins 1000 chaines
+de 100 caractères.
+<p>
+(Pour tester le programme, vous pourrez utiliser le programme
+<a href=mkstring.c>mkstring.c</a> pour fabriquer les chaines.
+Une version simple du test pourra ressembler à :
+<pre>
+$ gcc -g -Wall mkstring.c
+$ ./a.out 1000 100 > tata.txt   # fabriquer les chaines
+$ sort tata.txt > modele.txt    # les trier avec le tri standard du système
+$ gcc -g -Wall monprogramme.c
+$ a.out < tata.txt > sortie.txt # les trier avec mon programme
+$ diff sortie.txt modele.txt    # comparer
+$                               # pas de différences
+</pre>
+<p>Le programme à écrire peut utiliser des tableaux de tailles fixes.
+S'il vous plait, lisez les données sur l'entrée standard et écrivez
+les résultats sur la sortie standard.
+
+<p>
+<b>Question 2 bis</b> : modifier le programme pour qu'il puisse
+traiter des lignes beaucoup plus longues ou beaucoup plus de lignes
+(par exemple 200 000 lignes de 4 caractères aussi bien que 4 lignes de
+200 000 caractères). Le point crucial est qu'il n'est plus possible
+d'utiliser des tableaux de tailles fixes : il faut utiliser des
+allocations dynamiques ; les fonctions strdup et getline peuvent être
+utiles ici, en plus de malloc.
+
+<p>
+<b>Question 3</b> : écrire une fonction <em>isort</em> qui prend les
+mêmes arguments que la fonction <em>qsort</em> et fait le même travail
+mais <em> en utilisant un tri par insertion</em>. La fonction memcpy
+peut être utile ici. <!-- En guise de test, reprendre les questions
+précédentes avec cette fonction. -->
+
+<p>
+<b>Question 4</b> : mesurer l'évolution des temps de calcul de tri
+avec ces deux fonctions suivant le nombre d'éléments et tracer les
+courbes correspondantes. (La fonction de bibliothème <em>clock</em>
+peut être utile ici.)
+
+<p>Attention !  Des temps égaux ou proches de 0 sont peu
+significatifs. Il faut ou bien traiter un nombre d'éléments suffisant
+ou bien trier plusieurs fois les mêmes éléments pour observer des
+temps mesurables pour cette question.
+
+</body>
+</html>
