@@ -1,3 +1,7 @@
+/*
+**	q3 : Pourquoi memset ?
+*/
+
 # include <string.h>
 # include <strings.h>
 # include <stdlib.h>
@@ -42,11 +46,9 @@ int				lst_len(t_str *list) {
 	return (i);
 }
 
-int				comparer_qsort(const void *a, const void *b) {
-	const char 	*aa = *(const char **)a;
-	const char	*bb = *(const char **)b;
-
-	return (strcmp(aa, bb));
+int				comparer_isort(const void *a, const void *b) {
+	
+	return (strcmp(a, b));
 }
 
 void			print_tab(char **tab, int sz) {
@@ -55,6 +57,25 @@ void			print_tab(char **tab, int sz) {
 	i = 0;
 	while (i < sz) {
 		printf("%s\n", tab[i]);
+		i++;
+	}
+}
+
+void			isort(void *base, size_t nel, size_t width, int (*comparer)(const void *, const void *)) {
+	int			i, j;
+	char		*x;
+	char		**tab;
+
+	tab = base;
+	i = 1;
+	while (i < nel) {
+		x = tab[i];
+		j = i;
+		while (j > 0 && (*comparer)(tab[j - 1], x) > 0) {
+			tab[j] = tab[j - 1];
+			j--;
+		}
+		tab[j] = x;
 		i++;
 	}
 }
@@ -78,7 +99,6 @@ int				main(void) {
 	}
 	if (buf)
 		free(buf); // on tire la chasse derriere nous
-	// print_list(str_lst);
 
 	//	2. TRANSFERT DES POINTEURS DANS TABLEAU POUR TRI
 	tab = malloc(sizeof(char *) * i);
@@ -92,7 +112,7 @@ int				main(void) {
 
 	//	3. ON TRIE LE TABLEAU
 	print_tab(tab, i); 	// on affiche avant
-	qsort(tab, i, sizeof tab[0], &comparer_qsort);
+	isort(tab, i, sizeof tab[0], &comparer_isort);
 	printf("\n");
 	print_tab(tab, i);	// on affiche apres
  	return (0);
